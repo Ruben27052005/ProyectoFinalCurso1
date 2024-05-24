@@ -36,9 +36,6 @@ public class JuegoCarrito {
         this.juegos.add(juego);
     }
 
-    public void eliminarJuego(Juego juego) {
-        this.juegos.remove(juego);
-    }
 
     @Override
     public String toString() {

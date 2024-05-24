@@ -11,7 +11,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/usuario")
 
-public class UsuarioController {
+public class UsuarioService {
 
   static ConexionBD connection = new ConexionBD();
 

@@ -1,6 +1,7 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Entity.Juego;
+import com.example.demo.Service.JuegoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,77 +15,71 @@ import java.util.logging.Logger;
 public class JuegoController {
 
     @Autowired
-    private JuegoController juegoController;
+    private JuegoService juegoService;
+
+    private static final Logger LOGGER = Logger.getLogger(JuegoController.class.getName());
 
     @GetMapping("/")
     public String getAllJuegos(Model model) {
-        String valorfinal = "./juegos/listar";
         try {
-            model.addAttribute("juegos", juegoController.obtenerJuegos());
+            model.addAttribute("juegos", juegoService.obtenerJuegos());
+            return "./juegos/listar";
         } catch (Exception ex) {
-            Logger.getLogger(JuegoController.class.getName()).log(Level.SEVERE, null, ex);
-            valorfinal = "error";
+            LOGGER.log(Level.SEVERE, "Error retrieving games", ex);
+            return "error";
         }
-        return valorfinal;
     }
 
     @GetMapping("/add")
-    public String greetingForm(Model model) {
+    public String addForm(Model model) {
         model.addAttribute("juego", new Juego());
         return "./juegos/add";
     }
 
     @PostMapping("/add")
-    public String greetingForm(@ModelAttribute Juego juego, Model model) {
-        String valorfinal = "redirect:/juegos/";
+    public String addJuego(@ModelAttribute Juego juego, Model model) {
         try {
-            juegoController.crearJuego(juego);
-            try {
-                model.addAttribute("juegos", juegoController.obtenerJuegos());
-            } catch (Exception ex) {
-                Logger.getLogger(JuegoController.class.getName()).log(Level.SEVERE, null, ex);
-                valorfinal = "error";
-            }
-        } catch (Exception e) {
-            valorfinal = "error";
+            juegoService.crearJuego(juego);
+            model.addAttribute("juegos", juegoService.obtenerJuegos());
+            return "redirect:/juegos/";
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error adding game", ex);
+            return "error";
         }
-        return valorfinal;
     }
 
     @GetMapping("/editar")
-    public String modificar(@RequestParam("id") Long id, Model model) {
-        String valorfinal = "./juegos/editar";
+    public String editForm(@RequestParam("id") Long id, Model model) {
         try {
-            model.addAttribute("juego", juegoController.buscarJuego(id));
+            model.addAttribute("juego", juegoService.buscarJuego(id));
+            return "./juegos/editar";
         } catch (Exception ex) {
-            Logger.getLogger(JuegoController.class.getName()).log(Level.SEVERE, null, ex);
-            valorfinal = "error";
+            LOGGER.log(Level.SEVERE, "Error retrieving game for edit", ex);
+            return "error";
         }
-        return valorfinal;
     }
 
     @PostMapping("/editar")
-    public String modificarBBDD(@ModelAttribute Juego juego, Model model) {
-        String valorfinal = "redirect:/juegos/";
+    public String updateJuego(@ModelAttribute Juego juego, Model model) {
         try {
-            juegoController.actualizarJuego(juego);
-            model.addAttribute("juegos", juegoController.obtenerJuegos());
+            juegoService.actualizarJuego(juego);
+            model.addAttribute("juegos", juegoService.obtenerJuegos());
+            return "redirect:/juegos/";
         } catch (Exception ex) {
-            Logger.getLogger(JuegoController.class.getName()).log(Level.SEVERE, null, ex);
-            valorfinal = "error";
+            LOGGER.log(Level.SEVERE, "Error updating game", ex);
+            return "error";
         }
-        return valorfinal;
     }
 
     @GetMapping("/eliminar")
-    public String SubmitB (@RequestParam("id") Long id, Model model){
-        String valorfinal = "redirect:/juegos/";
+    public String deleteJuego(@RequestParam("id") Long id, Model model) {
         try {
-            juegoController.eliminarJuego(id);
-            model.addAttribute("juegos", juegoController.obtenerJuegos());
+            juegoService.eliminarJuego(id);
+            model.addAttribute("juegos", juegoService.obtenerJuegos());
+            return "redirect:/juegos/";
         } catch (Exception ex) {
-            valorfinal = "error";
+            LOGGER.log(Level.SEVERE, "Error deleting game", ex);
+            return "error";
         }
-        return valorfinal;
     }
 }

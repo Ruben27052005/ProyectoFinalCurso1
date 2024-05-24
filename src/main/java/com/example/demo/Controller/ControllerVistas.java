@@ -1,7 +1,7 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Entity.Usuario;
-import com.example.demo.Service.UsuarioController;
+import com.example.demo.Service.UsuarioService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,14 +13,14 @@ import java.util.logging.Logger;
 @Controller
 @RequestMapping("/usuario")
 public class ControllerVistas {
-    UsuarioController usuarioController = new UsuarioController();
+    UsuarioService usuarioController = new UsuarioService();
     @GetMapping("/")
     public String crud(Model model) {
         String valorfinal = "./usuario/vistalistar";
         try {
             model.addAttribute("usuarios", usuarioController.obtenerUsuarios());
         } catch (Exception ex) {
-            Logger.getLogger(UsuarioController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UsuarioService.class.getName()).log(Level.SEVERE, null, ex);
             valorfinal = "error";
         }
         return valorfinal;
@@ -61,10 +61,10 @@ public class ControllerVistas {
     public String modificarBBDD(@ModelAttribute Usuario usuario, Model model) {
         String valorfinal = "redirect:/usuario/";
         try {
-            UsuarioController.actualizarUsuario(usuario);
+            UsuarioService.actualizarUsuario(usuario);
             model.addAttribute("tareas", usuarioController.obtenerUsuarios());
         } catch (SQLException ex) {
-            Logger.getLogger(UsuarioController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UsuarioService.class.getName()).log(Level.SEVERE, null, ex);
             valorfinal = "error";
         }
         return valorfinal;
