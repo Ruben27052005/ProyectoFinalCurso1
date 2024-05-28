@@ -32,7 +32,7 @@ public class ContactoController {
     }
 
     @PostMapping("/add")
-    public String greetingForm(@ModelAttribute Contacto contacto, Model model) {
+    public String greetingForm(@ModelAttribute Contacto contacto, Model model) { 
         String valorfinal = "redirect:/contacto/";
         try {
             Contacto.crearContacto(contacto.getNombre(), contacto.getTelefono(), contacto.getEmail());

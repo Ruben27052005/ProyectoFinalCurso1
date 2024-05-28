@@ -1,7 +1,7 @@
 package com.example.demo.Service;
 
 import com.example.demo.Database.ConexionBD;
-import com.example.demo.Entity.Usuario;
+import com.example.demo.Entity.Usuarios;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -16,7 +16,7 @@ public class UsuarioService {
   static ConexionBD connection = new ConexionBD();
 
     // Método para crear un nuevo usuario en la base de datos
-    public static void crearUsuario(Usuario usuario) throws SQLException {
+    public static void crearUsuario(Usuarios usuario) throws SQLException {
         // Obtiene el nuevo ID disponible para el usuario
 
         String insertSql = "INSERT INTO Usuarios ( nombre, edad, email) VALUES (?, ?, ?)";
@@ -30,8 +30,8 @@ public class UsuarioService {
     }
 
     // Método para obtener todos los usuarios almacenados en la base de datos
-    public List<Usuario> obtenerUsuarios() throws SQLException{
-        List<Usuario> usuarios = new ArrayList<>();
+    public List<Usuarios> obtenerUsuarios() throws SQLException{
+        List<Usuarios> usuarios = new ArrayList<>();
         String sql = "SELECT * FROM Usuarios";
 
             // Prepara la sentencia SQL para obtener todos los usuarios de la base de datos
@@ -39,7 +39,7 @@ public class UsuarioService {
             ResultSet resultSet = statement.executeQuery(); // Ejecuta la consulta y obtiene el resultado
             // Itera sobre el resultado y crea objetos Usuario para cada registro
             while (resultSet.next()) {
-                Usuario usuario = new Usuario();
+                Usuarios usuario = new Usuarios();
                 usuario.setId(resultSet.getInt("id"));
                 usuario.setNombre(resultSet.getString("nombre"));
                 usuario.setEdad(resultSet.getInt("edad"));
@@ -57,7 +57,7 @@ public class UsuarioService {
 
 
     // Método para actualizar los datos de un usuario existente en la base de datos
-    public static void actualizarUsuario(Usuario usuario) throws SQLException {
+    public static void actualizarUsuario(Usuarios usuario) throws SQLException {
         String sql = "UPDATE Usuarios SET nombre = ?, edad = ?, email = ? WHERE id = ?";
 
             // Prepara la sentencia SQL para actualizar los datos del usuario
@@ -71,12 +71,12 @@ public class UsuarioService {
 
     }
 
-    public Usuario buscar(int id) throws SQLException {
+    public Usuarios buscar(int id) throws SQLException {
         Statement consulta = connection.conectar().createStatement();
         ResultSet rs = consulta.executeQuery("SELECT * FROM usuarios WHERE id = " + id);
-        Usuario usuario = null;
+        Usuarios usuario = null;
         if (rs.next()) {
-            usuario = new Usuario(
+            usuario = new Usuarios(
                     rs.getInt("id"),
                     rs.getString("nombre"),
                     rs.getInt("edad"),

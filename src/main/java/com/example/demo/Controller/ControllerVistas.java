@@ -1,6 +1,6 @@
 package com.example.demo.Controller;
 
-import com.example.demo.Entity.Usuario;
+import com.example.demo.Entity.Usuarios;
 import com.example.demo.Service.UsuarioService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,12 +11,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Controller
-@RequestMapping("/usuario")
+@RequestMapping("/usuariosV")
 public class ControllerVistas {
-    UsuarioService usuarioController = new UsuarioService();
+    private final UsuarioService usuarioController = new UsuarioService();
+
     @GetMapping("/")
     public String crud(Model model) {
-        String valorfinal = "./usuario/vistalistar";
+        String valorfinal = "usuariosV/vistalistar";
         try {
             model.addAttribute("usuarios", usuarioController.obtenerUsuarios());
         } catch (Exception ex) {
@@ -25,30 +26,29 @@ public class ControllerVistas {
         }
         return valorfinal;
     }
+
     @GetMapping("/add")
     public String grettingForm(Model model) {
-        model.addAttribute("usuario", new Usuario());
-        return "./usuario/add";
+        model.addAttribute("usuario", new Usuarios());
+        return "usuariosV/add";
     }
+
     @PostMapping("/add")
-    public String greetingForm(@ModelAttribute Usuario usuario, Model model) {
-        String valorfinal = "redirect:/usuario/";
+    public String greetingForm(@ModelAttribute Usuarios usuario, Model model) {
+        String valorfinal = "redirect:/usuariosV/";
         try {
             usuarioController.crearUsuario(usuario);
-            try {
-                model.addAttribute("usuarios", usuarioController.obtenerUsuarios());
-            } catch (SQLException ex) {
-                Logger.getLogger(ControllerVistas.class.getName()).log(Level.SEVERE, null, ex);
-                valorfinal = "error";
-            }
-        } catch (SQLException e) {
+            model.addAttribute("usuarios", usuarioController.obtenerUsuarios());
+        } catch (SQLException ex) {
+            Logger.getLogger(ControllerVistas.class.getName()).log(Level.SEVERE, null, ex);
             valorfinal = "error";
         }
         return valorfinal;
     }
+
     @GetMapping("/editar")
     public String modificar(@RequestParam("cod_usuario") int id, Model model) {
-        String valorfinal = "./usuario/editar";
+        String valorfinal = "usuariosV/editar";
         try {
             model.addAttribute("usuario", usuarioController.buscar(id));
         } catch (SQLException ex) {
@@ -57,27 +57,28 @@ public class ControllerVistas {
         }
         return valorfinal;
     }
+
     @PostMapping("/editar")
-    public String modificarBBDD(@ModelAttribute Usuario usuario, Model model) {
-        String valorfinal = "redirect:/usuario/";
+    public String modificarBBDD(@ModelAttribute Usuarios usuario, Model model) {
+        String valorfinal = "redirect:/usuariosV/";
         try {
             UsuarioService.actualizarUsuario(usuario);
-            model.addAttribute("tareas", usuarioController.obtenerUsuarios());
+            model.addAttribute("usuarios", usuarioController.obtenerUsuarios());
         } catch (SQLException ex) {
             Logger.getLogger(UsuarioService.class.getName()).log(Level.SEVERE, null, ex);
             valorfinal = "error";
         }
         return valorfinal;
     }
-    // Lógica para eliminar una entidad
-    // Implementar método y ruta correspondiente si deseas tener funcionalidad de eliminación
+
     @GetMapping("/eliminar")
-    public String SubmitB (@RequestParam("cod_usuario") int id, Model model){
-        String valorfinal="redirect:/usuario/";
+    public String eliminar(@RequestParam("cod_usuario") int id, Model model) {
+        String valorfinal = "redirect:/usuariosV/";
         try {
-            model.addAttribute("clientes",usuarioController.eliminarUsuario(id));
+            usuarioController.eliminarUsuario(id);
+            model.addAttribute("usuarios", usuarioController.obtenerUsuarios());
         } catch (SQLException ex) {
-            valorfinal="error";
+            valorfinal = "error";
         }
         return valorfinal;
     }

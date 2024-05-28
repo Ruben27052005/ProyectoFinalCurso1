@@ -3,16 +3,16 @@ package com.example.demo.Entity;
  // Contiene los atributos básicos de un usuario, como su identificador,
  //nombre, edad y correo electrónico.
 
-public class Usuario {
+public class Usuarios {
     public int id;
     public String nombre;
     public int edad;
     public String email;
 
-    public Usuario() {
+    public Usuarios() {
     }
 
-    public Usuario(int id, String nombre, int edad, String email) {
+    public Usuarios(int id, String nombre, int edad, String email) {
         this.id = id;
         this.nombre = nombre;
         this.edad = edad;
